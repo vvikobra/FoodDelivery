@@ -1,4 +1,4 @@
-package Entities;
+package entities;
 
 import jakarta.persistence.*;
 
@@ -9,6 +9,15 @@ public class User extends BaseEntity {
     private String phoneNumber;
     private String address;
 
+    public User(String name, String phoneNumber, String address) {
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+    }
+
+    protected User() {
+    }
+
     @Column(nullable = false)
     public String getName() {
         return name;
@@ -18,7 +27,7 @@ public class User extends BaseEntity {
         this.name = name;
     }
 
-    @Column(nullable = false)
+    @Column(name = "phone_number", nullable = false)
     public String getPhoneNumber() {
         return phoneNumber;
     }

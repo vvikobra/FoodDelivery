@@ -1,25 +1,36 @@
-package Entities;
+package entities;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.Set;
 
 @Entity
 @Table(name = "orders")
 public class Order extends BaseEntity {
-    private LocalDate registrationDate;
+    private OffsetDateTime registrationDate;
     private String status;
     private User user;
     private Courier courier;
     private Set<Position> positions;
 
-    @Column(nullable = false)
-    public LocalDate getRegistrationDate() {
+    public Order(OffsetDateTime registrationDate, String status, User user, Courier courier, Set<Position> positions) {
+        this.registrationDate = registrationDate;
+        this.status = status;
+        this.user = user;
+        this.courier = courier;
+        this.positions = positions;
+    }
+
+    protected Order() {
+    }
+
+    @Column(name = "registration_date", nullable = false)
+    public OffsetDateTime getRegistrationDate() {
         return registrationDate;
     }
 
-    public void setRegistrationDate(LocalDate registrationDate) {
+    public void setRegistrationDate(OffsetDateTime registrationDate) {
         this.registrationDate = registrationDate;
     }
 

@@ -1,4 +1,4 @@
-package Entities;
+package entities;
 
 
 import jakarta.persistence.*;
@@ -11,12 +11,27 @@ public class Dish extends BaseEntity {
     private String name;
     private String description;
     private int cost;
-    private double calories;
-    private double protein;
-    private double fats;
-    private double carbs;
-    private double weight;
+    private int calories;
+    private int protein;
+    private int fats;
+    private int carbs;
+    private int weight;
     private Set<Position> positions;
+
+    public Dish(String name, String description, int cost, int calories, int protein, int fats, int carbs, int weight, Set<Position> positions) {
+        this.name = name;
+        this.description = description;
+        this.cost = cost;
+        this.calories = calories;
+        this.protein = protein;
+        this.fats = fats;
+        this.carbs = carbs;
+        this.weight = weight;
+        this.positions = positions;
+    }
+
+    protected Dish() {
+    }
 
     @Column(nullable = false)
     public String getName() {
@@ -45,48 +60,48 @@ public class Dish extends BaseEntity {
         this.cost = cost;
     }
 
-    @Column(nullable = false, scale = 1)
+    @Column(nullable = false)
     public double getCalories() {
         return calories;
     }
 
-    public void setCalories(double calories) {
+    public void setCalories(int calories) {
         this.calories = calories;
     }
 
-    @Column(nullable = false, scale = 1)
+    @Column(nullable = false)
     public double getProtein() {
         return protein;
     }
 
-    public void setProtein(double protein) {
+    public void setProtein(int protein) {
         this.protein = protein;
     }
 
-    @Column(nullable = false, scale = 1)
+    @Column(nullable = false)
     public double getFats() {
         return fats;
     }
 
-    public void setFats(double fats) {
+    public void setFats(int fats) {
         this.fats = fats;
     }
 
-    @Column(nullable = false, scale = 1)
+    @Column(nullable = false)
     public double getCarbs() {
         return carbs;
     }
 
-    public void setCarbs(double carbs) {
+    public void setCarbs(int carbs) {
         this.carbs = carbs;
     }
 
-    @Column(nullable = false, scale = 1)
+    @Column(nullable = false)
     public double getWeight() {
         return weight;
     }
 
-    public void setWeight(double weight) {
+    public void setWeight(int weight) {
         this.weight = weight;
     }
 

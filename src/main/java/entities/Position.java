@@ -1,4 +1,4 @@
-package Entities;
+package entities;
 
 import jakarta.persistence.*;
 
@@ -7,6 +7,14 @@ import jakarta.persistence.*;
 public class Position {
     private PositionCompositeKey compositeKey;
     private int dishesQuantity;
+
+    public Position(PositionCompositeKey compositeKey, int dishesQuantity) {
+        this.compositeKey = compositeKey;
+        this.dishesQuantity = dishesQuantity;
+    }
+
+    protected Position() {
+    }
 
     @Column(nullable = false)
     public PositionCompositeKey getCompositeKey() {
@@ -17,7 +25,7 @@ public class Position {
         this.compositeKey = compositeKey;
     }
 
-    @Column(nullable = false)
+    @Column(name = "dishes_quantity", nullable = false)
     public int getDishesQuantity() {
         return dishesQuantity;
     }

@@ -20,6 +20,8 @@ public class UserRepositoryImpl extends BaseRepository<User, Integer> implements
     @Override
     public String findDeliveryAreaById(Integer id) {
         return entityManager.createQuery("select deliveryArea from User u where u.id = :id")
-                .setParameter("id", id).toString();
+                .setParameter("id", id)
+                .getSingleResult()
+                .toString();
     }
 }

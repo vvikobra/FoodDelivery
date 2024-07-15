@@ -25,7 +25,7 @@ public class PositionRepositoryImpl extends BaseRepository<Position, PositionCom
     @Override
     @Transactional
     public List<Dish> findDishesByUserId(Integer userId) {
-        return entityManager.createQuery("select p.compositeKey.dish from Position p where p.order.user.id = :userId", Dish.class)
+        return entityManager.createQuery("select p.compositeKey.dish from Position p where p.compositeKey.order.user.id = :userId", Dish.class)
                 .setParameter("userId", userId)
                 .getResultList();
     }

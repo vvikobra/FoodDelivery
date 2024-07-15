@@ -5,21 +5,18 @@ import org.example.entities.Dish;
 import org.example.entities.Position;
 import org.example.entities.enums.CourierTransportType;
 import org.example.repositories.Impl.CourierRepositoryImpl;
-import org.example.repositories.Impl.DishRepositoryImpl;
 import org.example.repositories.Impl.PositionRepositoryImpl;
 import org.example.repositories.Impl.UserRepositoryImpl;
 import org.example.services.CourierService;
-import org.example.services.DishService;
 import org.example.services.PositionService;
 import org.example.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class DomainService implements DishService, PositionService, CourierService, UserService {
+public class DomainCourierService implements PositionService, CourierService, UserService {
 
     @Autowired
     private PositionRepositoryImpl positionRepository;
@@ -28,30 +25,8 @@ public class DomainService implements DishService, PositionService, CourierServi
     private CourierRepositoryImpl courierRepository;
 
     @Autowired
-    private DishRepositoryImpl dishRepository;
-
-    @Autowired
     private UserRepositoryImpl userRepository;
 
-    public List<Dish> getRecommendedDishes(Integer userId) {
-        List<Dish> userDishes = findDishesByUserId(userId);
-        List<Dish> recommendedDishes = new ArrayList<>();
-        int calories;
-        double minCalories;
-        double maxCalories;
-        String type;
-
-        for (Dish userDish : userDishes) {
-            type = userDish.getType().toString();
-            calories = userDish.getCalories();
-            minCalories = calories * 0.9;
-            maxCalories = calories * 1.1;
-
-            recommendedDishes = findByTypeAndCalories(type, minCalories, maxCalories);
-        }
-
-        return recommendedDishes;
-    }
 
     public int calculateOrderWeight(Integer orderId) {
         List<Position> positions = findByOrderId(orderId);
@@ -69,9 +44,9 @@ public class DomainService implements DishService, PositionService, CourierServi
         return totalWeight;
     }
 
-    public Courier findSuitableCourier(String deliveryArea, double orderWeight, Integer orderId, Integer userId) {
+    public Courier findSuitableCourier(String deliveryArea, Integer orderId, Integer userId) {
         List<Courier> availableCouriers = findByDeliveryAreaAndStatus(deliveryArea);
-        orderWeight = calculateOrderWeight(orderId);
+        double orderWeight = (double) calculateOrderWeight(orderId) / 1000;
         deliveryArea = findDeliveryAreaById(userId);
         for (Courier courier : availableCouriers) {
             if (orderWeight <= 5 && CourierTransportType.WALKING.equals(courier.getTransportType())) {
@@ -83,11 +58,6 @@ public class DomainService implements DishService, PositionService, CourierServi
             }
         }
         return null;
-    }
-
-    @Override
-    public List<Dish> findByTypeAndCalories(String type, double minCalories, double maxCalories) {
-        return dishRepository.findByTypeAndCalories(type, minCalories, maxCalories);
     }
 
     @Override

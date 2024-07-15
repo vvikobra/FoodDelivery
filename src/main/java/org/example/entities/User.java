@@ -1,27 +1,27 @@
-package entities;
+package org.example.entities;
 
 import jakarta.persistence.*;
 
 import java.util.Set;
 
 @Entity
-@Table(name = "courier")
-public class Courier extends BaseEntity {
+@Table(name = "users")
+public class User extends BaseEntity {
     private String name;
     private String phoneNumber;
+    private String address;
     private String deliveryArea;
-    private String vehicle;
     private Set<Order> orders;
 
-    public Courier(String name, String phoneNumber, String deliveryArea, String vehicle, Set<Order> orders) {
+    public User(String name, String phoneNumber, String address, String deliveryArea, Set<Order> orders) {
         this.name = name;
         this.phoneNumber = phoneNumber;
+        this.address = address;
         this.deliveryArea = deliveryArea;
-        this.vehicle = vehicle;
         this.orders = orders;
     }
 
-    protected Courier() {
+    protected User() {
     }
 
     @Column(nullable = false)
@@ -42,6 +42,15 @@ public class Courier extends BaseEntity {
         this.phoneNumber = phoneNumber;
     }
 
+    @Column(nullable = false)
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     @Column(name = "delivery_area", nullable = false)
     public String getDeliveryArea() {
         return deliveryArea;
@@ -51,16 +60,7 @@ public class Courier extends BaseEntity {
         this.deliveryArea = deliveryArea;
     }
 
-    @Column(nullable = false)
-    public String getVehicle() {
-        return vehicle;
-    }
-
-    public void setVehicle(String vehicle) {
-        this.vehicle = vehicle;
-    }
-
-    @OneToMany(mappedBy = "order", targetEntity = Order.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", targetEntity = Order.class)
     public Set<Order> getOrders() {
         return orders;
     }

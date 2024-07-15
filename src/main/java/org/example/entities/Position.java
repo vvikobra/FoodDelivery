@@ -1,21 +1,14 @@
-package entities;
+package org.example.entities;
 
 import jakarta.persistence.*;
 
 @Entity
-@Table
+@Table(name = "position")
 public class Position {
     private PositionCompositeKey compositeKey;
     private int dishesQuantity;
 
-    public Position(PositionCompositeKey compositeKey, int dishesQuantity) {
-        this.compositeKey = compositeKey;
-        this.dishesQuantity = dishesQuantity;
-    }
-
-    protected Position() {
-    }
-
+    @EmbeddedId
     @Column(nullable = false)
     public PositionCompositeKey getCompositeKey() {
         return compositeKey;

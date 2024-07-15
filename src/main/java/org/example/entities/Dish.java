@@ -1,32 +1,29 @@
-package entities;
+package org.example.entities;
 
 
 import jakarta.persistence.*;
+import org.example.entities.enums.DishType;
 
 import java.util.Set;
 
 @Entity
-@Table
+@Table (name = "dish")
 public class Dish extends BaseEntity {
     private String name;
     private String description;
     private int cost;
     private int calories;
-    private int protein;
-    private int fats;
-    private int carbs;
     private int weight;
+    private DishType type;
     private Set<Position> positions;
 
-    public Dish(String name, String description, int cost, int calories, int protein, int fats, int carbs, int weight, Set<Position> positions) {
+    public Dish(String name, String description, int cost, int calories, int weight, DishType type, Set<Position> positions) {
         this.name = name;
         this.description = description;
         this.cost = cost;
         this.calories = calories;
-        this.protein = protein;
-        this.fats = fats;
-        this.carbs = carbs;
         this.weight = weight;
+        this.type = type;
         this.positions = positions;
     }
 
@@ -61,7 +58,7 @@ public class Dish extends BaseEntity {
     }
 
     @Column(nullable = false)
-    public double getCalories() {
+    public int getCalories() {
         return calories;
     }
 
@@ -70,34 +67,7 @@ public class Dish extends BaseEntity {
     }
 
     @Column(nullable = false)
-    public double getProtein() {
-        return protein;
-    }
-
-    public void setProtein(int protein) {
-        this.protein = protein;
-    }
-
-    @Column(nullable = false)
-    public double getFats() {
-        return fats;
-    }
-
-    public void setFats(int fats) {
-        this.fats = fats;
-    }
-
-    @Column(nullable = false)
-    public double getCarbs() {
-        return carbs;
-    }
-
-    public void setCarbs(int carbs) {
-        this.carbs = carbs;
-    }
-
-    @Column(nullable = false)
-    public double getWeight() {
+    public int getWeight() {
         return weight;
     }
 
@@ -105,7 +75,17 @@ public class Dish extends BaseEntity {
         this.weight = weight;
     }
 
-    @OneToMany(mappedBy = "position", targetEntity = Position.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    public DishType getType() {
+        return type;
+    }
+
+    public void setType(DishType type) {
+        this.type = type;
+    }
+
+    @OneToMany(mappedBy = "compositeKey.dish", targetEntity = Position.class)
     public Set<Position> getPositions() {
         return positions;
     }

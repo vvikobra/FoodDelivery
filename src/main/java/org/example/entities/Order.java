@@ -1,5 +1,6 @@
-package entities;
+package org.example.entities;
 
+import org.example.entities.enums.OrderStatus;
 import jakarta.persistence.*;
 
 import java.time.OffsetDateTime;
@@ -9,14 +10,14 @@ import java.util.Set;
 @Table(name = "orders")
 public class Order extends BaseEntity {
     private OffsetDateTime registrationDate;
-    private String status;
+    private OrderStatus status;
     private User user;
     private Courier courier;
     private Set<Position> positions;
 
-    public Order(OffsetDateTime registrationDate, String status, User user, Courier courier, Set<Position> positions) {
+    public Order(OffsetDateTime registrationDate, User user, Courier courier, Set<Position> positions) {
         this.registrationDate = registrationDate;
-        this.status = status;
+        this.status = OrderStatus.CREATED;
         this.user = user;
         this.courier = courier;
         this.positions = positions;
@@ -35,11 +36,12 @@ public class Order extends BaseEntity {
     }
 
     @Column(nullable = false)
-    public String getStatus() {
+    @Enumerated(EnumType.STRING)
+    public OrderStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(OrderStatus status) {
         this.status = status;
     }
 
@@ -63,7 +65,7 @@ public class Order extends BaseEntity {
         this.courier = courier;
     }
 
-    @OneToMany(mappedBy = "position", targetEntity = Position.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "compositeKey.order", targetEntity = Position.class)
     public Set<Position> getPositions() {
         return positions;
     }

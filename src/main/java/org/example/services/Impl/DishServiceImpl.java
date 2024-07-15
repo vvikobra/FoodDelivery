@@ -18,22 +18,21 @@ public class DishServiceImpl implements DishService {
     public String generateDailyMenu(double weight, double height) {
         double baseCalorieContent = (10 * weight + 6.25 * height - 5 * 30 + 5) * 1.55;
 
-        double mealCalories = baseCalorieContent / 4;
+        int mealCalories = (int) (baseCalorieContent / 4);
 
-        double snackCalories = mealCalories / 2;
+        int snackCalories = mealCalories / 2;
 
-        List<Dish> breakfastDishes = findByTypeAndCalories(DishType.BREAKFAST.toString(), mealCalories - 50, mealCalories + 50);
-        List<Dish> lunchDishes = findByTypeAndCalories(DishType.LUNCH.toString(), mealCalories - 50, mealCalories + 50);
-        List<Dish> dinnerDishes = findByTypeAndCalories(DishType.DINNER.toString(), mealCalories - 50, mealCalories + 50);
-        List<Dish> snackDishes = findByTypeAndCalories(DishType.SNACK.toString(), snackCalories - 25, snackCalories + 25);
+        List<Dish> breakfastDishes = findByTypeAndCalories(DishType.BREAKFAST, mealCalories - 50, mealCalories + 50);
+        List<Dish> lunchDishes = findByTypeAndCalories(DishType.LUNCH, mealCalories - 50, mealCalories + 50);
+        List<Dish> dinnerDishes = findByTypeAndCalories(DishType.DINNER, mealCalories - 50, mealCalories + 50);
+        List<Dish> snackDishes = findByTypeAndCalories(DishType.SNACK, snackCalories - 25, snackCalories + 25);
 
         return "Ваше меню на день:\n" +
                 "Завтрак: " + selectDish(breakfastDishes) + "\n" +
                 "Перекус 1: " + selectDish(snackDishes) + "\n" +
                 "Обед: " + selectDish(lunchDishes) + "\n" +
                 "Перекус 2: " + selectDish(snackDishes) + "\n" +
-                "Ужин: " + selectDish(dinnerDishes) + "\n" +
-                "Общее количество калорий: " + mealCalories + "\n";
+                "Ужин: " + selectDish(dinnerDishes) + "\n";
     }
 
     private String selectDish(List<Dish> dishes) {
@@ -45,7 +44,7 @@ public class DishServiceImpl implements DishService {
     }
 
     @Override
-    public List<Dish> findByTypeAndCalories(String type, double minCalories, double maxCalories) {
+    public List<Dish> findByTypeAndCalories(DishType type, int minCalories, int maxCalories) {
         return dishRepository.findByTypeAndCalories(type, minCalories, maxCalories);
     }
 }

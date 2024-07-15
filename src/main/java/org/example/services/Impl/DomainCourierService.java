@@ -44,10 +44,11 @@ public class DomainCourierService implements PositionService, CourierService, Us
         return totalWeight;
     }
 
-    public Courier findSuitableCourier(String deliveryArea, Integer orderId, Integer userId) {
+    public Courier findSuitableCourier(Integer orderId, Integer userId) {
+        String deliveryArea = findDeliveryAreaById(userId);
         List<Courier> availableCouriers = findByDeliveryAreaAndStatus(deliveryArea);
-        double orderWeight = (double) calculateOrderWeight(orderId) / 1000;
-        deliveryArea = findDeliveryAreaById(userId);
+        int orderWeight = calculateOrderWeight(orderId) / 1000;
+        System.out.println(availableCouriers);
         for (Courier courier : availableCouriers) {
             if (orderWeight <= 5 && CourierTransportType.WALKING.equals(courier.getTransportType())) {
                 return courier;
@@ -73,11 +74,6 @@ public class DomainCourierService implements PositionService, CourierService, Us
     @Override
     public List<Courier> findByDeliveryAreaAndStatus(String deliveryArea) {
         return courierRepository.findByDeliveryAreaAndStatus(deliveryArea);
-    }
-
-    @Override
-    public Courier updateCourierSetStatusForId(String status, Integer id) {
-        return courierRepository.updateCourierSetStatusForId(status, id);
     }
 
     @Override

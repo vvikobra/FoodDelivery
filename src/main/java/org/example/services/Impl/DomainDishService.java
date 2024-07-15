@@ -2,15 +2,18 @@ package org.example.services.Impl;
 
 import org.example.entities.Dish;
 import org.example.entities.Position;
+import org.example.entities.enums.DishType;
 import org.example.repositories.Impl.DishRepositoryImpl;
 import org.example.repositories.Impl.PositionRepositoryImpl;
 import org.example.services.DishService;
 import org.example.services.PositionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class DomainDishService implements PositionService, DishService {
 
     @Autowired
@@ -23,15 +26,15 @@ public class DomainDishService implements PositionService, DishService {
         List<Dish> userDishes = findDishesByUserId(userId);
         List<Dish> recommendedDishes = new ArrayList<>();
         int calories;
-        double minCalories;
-        double maxCalories;
-        String type;
+        int minCalories;
+        int maxCalories;
+        DishType type;
 
         for (Dish userDish : userDishes) {
-            type = userDish.getType().toString();
+            type = userDish.getType();
             calories = userDish.getCalories();
-            minCalories = calories * 0.9;
-            maxCalories = calories * 1.1;
+            minCalories = (int) (calories * 0.9);
+            maxCalories = (int) (calories * 1.1);
 
             recommendedDishes.addAll(findByTypeAndCalories(type, minCalories, maxCalories));
         }
@@ -40,7 +43,7 @@ public class DomainDishService implements PositionService, DishService {
     }
 
     @Override
-    public List<Dish> findByTypeAndCalories(String type, double minCalories, double maxCalories) {
+    public List<Dish> findByTypeAndCalories(DishType type, int minCalories, int maxCalories) {
         return dishRepository.findByTypeAndCalories(type, minCalories, maxCalories);
     }
 

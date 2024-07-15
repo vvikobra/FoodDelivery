@@ -7,6 +7,4 @@ import java.util.List;
 public interface CourierService {
 
     List<Courier> findByDeliveryAreaAndStatus(String deliveryArea);
-
-    Courier updateCourierSetStatusForId(String status, Integer id);
 }

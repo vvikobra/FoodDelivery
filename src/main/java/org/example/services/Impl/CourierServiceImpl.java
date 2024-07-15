@@ -18,9 +18,4 @@ public class CourierServiceImpl implements CourierService {
     public List<Courier> findByDeliveryAreaAndStatus(String deliveryArea) {
         return courierRepository.findByDeliveryAreaAndStatus(deliveryArea);
     }
-
-    @Override
-    public Courier updateCourierSetStatusForId(String status, Integer id) {
-        return courierRepository.updateCourierSetStatusForId(status, id);
-    }
 }

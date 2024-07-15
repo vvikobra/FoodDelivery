@@ -1,5 +1,6 @@
 package org.example.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.example.entities.enums.CourierStatus;
 import org.example.entities.enums.CourierTransportType;
 import jakarta.persistence.*;
@@ -76,6 +77,7 @@ public class Courier extends BaseEntity {
     }
 
     @OneToMany(mappedBy = "courier",targetEntity = Order.class)
+    @JsonBackReference
     public Set<Order> getOrders() {
         return orders;
     }

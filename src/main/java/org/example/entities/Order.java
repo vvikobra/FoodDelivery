@@ -1,6 +1,7 @@
 package org.example.entities;
 
-import org.example.entities.enums.OrderStatus;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.OffsetDateTime;
@@ -10,14 +11,12 @@ import java.util.Set;
 @Table(name = "orders")
 public class Order extends BaseEntity {
     private OffsetDateTime registrationDate;
-    private OrderStatus status;
     private User user;
     private Courier courier;
     private Set<Position> positions;
 
     public Order(OffsetDateTime registrationDate, User user, Courier courier, Set<Position> positions) {
         this.registrationDate = registrationDate;
-        this.status = OrderStatus.CREATED;
         this.user = user;
         this.courier = courier;
         this.positions = positions;
@@ -35,18 +34,9 @@ public class Order extends BaseEntity {
         this.registrationDate = registrationDate;
     }
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    public OrderStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(OrderStatus status) {
-        this.status = status;
-    }
-
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    @JsonManagedReference
     public User getUser() {
         return user;
     }
@@ -57,6 +47,7 @@ public class Order extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "courier_id", referencedColumnName = "id", nullable = false)
+    @JsonManagedReference
     public Courier getCourier() {
         return courier;
     }
@@ -66,6 +57,7 @@ public class Order extends BaseEntity {
     }
 
     @OneToMany(mappedBy = "compositeKey.order", targetEntity = Position.class)
+    @JsonBackReference
     public Set<Position> getPositions() {
         return positions;
     }

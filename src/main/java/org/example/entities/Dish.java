@@ -80,7 +80,6 @@ public class Dish extends BaseEntity {
     public DishType getType() {
         return type;
     }
-
     public void setType(DishType type) {
         this.type = type;
     }

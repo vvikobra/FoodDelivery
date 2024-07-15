@@ -1,5 +1,6 @@
 package org.example.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.util.Set;
@@ -61,6 +62,7 @@ public class User extends BaseEntity {
     }
 
     @OneToMany(mappedBy = "user", targetEntity = Order.class)
+    @JsonBackReference
     public Set<Order> getOrders() {
         return orders;
     }

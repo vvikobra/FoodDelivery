@@ -4,13 +4,15 @@ import org.example.entities.enums.CourierTransportType;
 
 public class CourierDto {
 
+    private int id;
     private String deliveryArea;
     private String name;
     private String phoneNumber;
     private String status;
     private CourierTransportType transportType;
 
-    public CourierDto(String deliveryArea, String name, String phoneNumber, String status, CourierTransportType transportType) {
+    public CourierDto(int id, String deliveryArea, String name, String phoneNumber, String status, CourierTransportType transportType) {
+        this.id = id;
         this.deliveryArea = deliveryArea;
         this.name = name;
         this.phoneNumber = phoneNumber;
@@ -19,6 +21,14 @@ public class CourierDto {
     }
 
     public CourierDto() {}
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getDeliveryArea() {
         return deliveryArea;

@@ -1,6 +1,5 @@
 package org.example.entities;
 
-
 import jakarta.persistence.*;
 import org.example.entities.enums.DishType;
 

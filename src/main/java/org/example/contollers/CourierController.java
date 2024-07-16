@@ -14,7 +14,6 @@ public class CourierController {
 
     @GetMapping("/search/{orderId}/{userId}")
     public CourierDto search(@PathVariable() Integer orderId, @PathVariable() Integer userId) {
-        System.out.println("orderId: " + orderId + ", userId: " + userId);
         return courierService.findSuitableCourier(orderId, userId);
     }
 }

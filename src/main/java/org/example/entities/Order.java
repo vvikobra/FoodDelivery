@@ -43,7 +43,7 @@ public class Order extends BaseEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "courier_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "courier_id", referencedColumnName = "id")
     public Courier getCourier() {
         return courier;
     }

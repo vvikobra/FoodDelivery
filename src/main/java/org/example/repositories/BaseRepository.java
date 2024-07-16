@@ -4,7 +4,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 
-import java.util.List;
 
 public abstract class BaseRepository<Entity, T> {
 
@@ -30,9 +29,5 @@ public abstract class BaseRepository<Entity, T> {
     @Transactional
     public Entity update(Entity entity) {
         return entityManager.merge(entity);
-    }
-
-    public List<Entity> findAll() {
-        return entityManager.createQuery("from " + entityClass.getName(), entityClass).getResultList();
     }
 }

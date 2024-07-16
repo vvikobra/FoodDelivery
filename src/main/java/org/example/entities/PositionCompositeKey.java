@@ -10,6 +10,8 @@ public class PositionCompositeKey implements Serializable {
     private Dish dish;
     private Order order;
 
+
+
     @ManyToOne
     @JoinColumn(name = "dish_id", referencedColumnName = "id")
     public Dish getDish() {

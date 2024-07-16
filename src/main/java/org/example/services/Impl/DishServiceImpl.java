@@ -35,7 +35,7 @@ public class DishServiceImpl implements DishService {
                 "Перекус 1: " + selectDish(snackDishes) + "\n" +
                 "Обед: " + selectDish(lunchDishes) + "\n" +
                 "Перекус 2: " + selectDish(snackDishes) + "\n" +
-                "Ужин: " + selectDish(dinnerDishes) + "\n";
+                "Ужин: " + selectDish(dinnerDishes);
     }
 
     private String selectDish(List<DishDto> dishes) {

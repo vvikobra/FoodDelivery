@@ -2,9 +2,9 @@ package org.example.services.Impl;
 
 import org.example.dtos.CourierDto;
 import org.example.entities.Dish;
-import org.example.entities.Order;
 import org.example.entities.Position;
 import org.example.entities.enums.CourierTransportType;
+import org.example.exception.NoSuitableCourierException;
 import org.example.repositories.Impl.CourierRepositoryImpl;
 import org.example.repositories.Impl.OrderRepositoryImpl;
 import org.example.repositories.Impl.PositionRepositoryImpl;
@@ -53,21 +53,29 @@ public class DomainCourierService implements PositionService, CourierService, Us
     }
 
     public CourierDto findSuitableCourier(Integer orderId, Integer userId) {
-        String deliveryArea = findDeliveryAreaById(userId);
-        List<CourierDto> availableCouriers = findByDeliveryAreaAndStatus(deliveryArea);
-        int orderWeight = calculateOrderWeight(orderId) / 1000;
-        CourierDto suitableCourier = null;
-        for (CourierDto courier : availableCouriers) {
-            if (orderWeight <= 5 && CourierTransportType.WALKING.equals(courier.getTransportType())) {
-                suitableCourier = courier;
-            } else if (orderWeight > 5 && orderWeight <= 10 && CourierTransportType.BICYCLE.equals(courier.getTransportType())) {
-                suitableCourier = courier;
-            } else if (orderWeight > 10 && CourierTransportType.CAR.equals(courier.getTransportType())) {
-                suitableCourier = courier;
+        try {
+            String deliveryArea = findDeliveryAreaById(userId);
+            List<CourierDto> availableCouriers = findByDeliveryAreaAndStatus(deliveryArea);
+            int orderWeight = calculateOrderWeight(orderId) / 1000;
+            CourierDto suitableCourier = null;
+            for (CourierDto courier : availableCouriers) {
+                if (orderWeight <= 5 && CourierTransportType.WALKING.equals(courier.getTransportType())) {
+                    suitableCourier = courier;
+                } else if (orderWeight > 5 && orderWeight <= 10 && CourierTransportType.BICYCLE.equals(courier.getTransportType())) {
+                    suitableCourier = courier;
+                } else if (orderWeight > 10 && CourierTransportType.CAR.equals(courier.getTransportType())) {
+                    suitableCourier = courier;
+                }
             }
+            if (suitableCourier == null) {
+                throw new NoSuitableCourierException(orderId);
+            }
+            updateCourierIdByUserIdAndOrderId(orderId, suitableCourier.getId());
+            return suitableCourier;
+        } catch (Exception e) {
+            System.err.println("Error finding suitable courier: " + e.getMessage());
+            throw e;
         }
-        updateCourierIdByUserIdAndOrderId(orderId, suitableCourier.getId());
-        return suitableCourier;
     }
 
     @Override

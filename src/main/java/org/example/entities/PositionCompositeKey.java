@@ -13,7 +13,6 @@ public class PositionCompositeKey implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "dish_id", referencedColumnName = "id")
-    @JsonManagedReference
     public Dish getDish() {
         return dish;
     }
@@ -24,7 +23,6 @@ public class PositionCompositeKey implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "order_id", referencedColumnName = "id")
-    @JsonManagedReference
     public Order getOrder() {
         return order;
     }

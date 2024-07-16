@@ -7,7 +7,6 @@ import java.util.List;
 
 public interface DishRepository {
 
-    //Поиск блюд для формирования рекомендаций
     List<Dish> findByTypeAndCalories(DishType type, Integer minCalories, Integer maxCalories);
 
 }

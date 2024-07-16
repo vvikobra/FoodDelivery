@@ -16,7 +16,7 @@ public class DishServiceImpl implements DishService {
     @Autowired
     private DishRepositoryImpl dishRepository;
 
-    private ModelMapper modelMapper = new ModelMapper();
+    private final ModelMapper modelMapper = new ModelMapper();
 
     public String generateDailyMenu(double weight, double height) {
         double baseCalorieContent = (10 * weight + 6.25 * height - 5 * 30 + 5) * 1.55;

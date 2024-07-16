@@ -1,7 +1,6 @@
 package org.example.services;
 
 import org.example.dtos.DishDto;
-import org.example.entities.Dish;
 import org.example.entities.enums.DishType;
 
 import java.util.List;

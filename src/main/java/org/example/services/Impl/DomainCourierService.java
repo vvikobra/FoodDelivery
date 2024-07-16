@@ -2,12 +2,15 @@ package org.example.services.Impl;
 
 import org.example.dtos.CourierDto;
 import org.example.entities.Dish;
+import org.example.entities.Order;
 import org.example.entities.Position;
 import org.example.entities.enums.CourierTransportType;
 import org.example.repositories.Impl.CourierRepositoryImpl;
+import org.example.repositories.Impl.OrderRepositoryImpl;
 import org.example.repositories.Impl.PositionRepositoryImpl;
 import org.example.repositories.Impl.UserRepositoryImpl;
 import org.example.services.CourierService;
+import org.example.services.OrderService;
 import org.example.services.PositionService;
 import org.example.services.UserService;
 import org.modelmapper.ModelMapper;
@@ -17,7 +20,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class DomainCourierService implements PositionService, CourierService, UserService {
+public class DomainCourierService implements PositionService, CourierService, UserService, OrderService {
 
     @Autowired
     private PositionRepositoryImpl positionRepository;
@@ -28,7 +31,10 @@ public class DomainCourierService implements PositionService, CourierService, Us
     @Autowired
     private UserRepositoryImpl userRepository;
 
-    private ModelMapper modelMapper = new ModelMapper();
+    @Autowired
+    private OrderRepositoryImpl orderRepository;
+
+    private final ModelMapper modelMapper = new ModelMapper();
 
     public int calculateOrderWeight(Integer orderId) {
         List<Position> positions = findByOrderId(orderId);
@@ -50,17 +56,18 @@ public class DomainCourierService implements PositionService, CourierService, Us
         String deliveryArea = findDeliveryAreaById(userId);
         List<CourierDto> availableCouriers = findByDeliveryAreaAndStatus(deliveryArea);
         int orderWeight = calculateOrderWeight(orderId) / 1000;
-        System.out.println(availableCouriers);
+        CourierDto suitableCourier = null;
         for (CourierDto courier : availableCouriers) {
             if (orderWeight <= 5 && CourierTransportType.WALKING.equals(courier.getTransportType())) {
-                return courier;
+                suitableCourier = courier;
             } else if (orderWeight > 5 && orderWeight <= 10 && CourierTransportType.BICYCLE.equals(courier.getTransportType())) {
-                return courier;
+                suitableCourier = courier;
             } else if (orderWeight > 10 && CourierTransportType.CAR.equals(courier.getTransportType())) {
-                return courier;
+                suitableCourier = courier;
             }
         }
-        return null;
+        updateCourierIdByUserIdAndOrderId(orderId, suitableCourier.getId());
+        return suitableCourier;
     }
 
     @Override
@@ -81,5 +88,10 @@ public class DomainCourierService implements PositionService, CourierService, Us
     @Override
     public String findDeliveryAreaById(Integer id) {
         return userRepository.findDeliveryAreaById(id);
+    }
+
+    @Override
+    public void updateCourierIdByUserIdAndOrderId(Integer orderId, Integer courierId) {
+        orderRepository.updateCourierIdByUserIdAndOrderId(orderId, courierId);
     }
 }

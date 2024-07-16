@@ -24,7 +24,7 @@ public class DomainDishService implements PositionService, DishService {
     @Autowired
     private DishRepositoryImpl dishRepository;
 
-    private ModelMapper modelMapper = new ModelMapper();
+    private final ModelMapper modelMapper = new ModelMapper();
 
     public List<DishDto> getRecommendedDishes(Integer userId) {
         List<Dish> userDishes = findDishesByUserId(userId);

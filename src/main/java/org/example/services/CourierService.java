@@ -1,10 +1,10 @@
 package org.example.services;
 
-import org.example.entities.Courier;
+import org.example.dtos.CourierDto;
 
 import java.util.List;
 
 public interface CourierService {
 
-    List<Courier> findByDeliveryAreaAndStatus(String deliveryArea);
+    List<CourierDto> findByDeliveryAreaAndStatus(String deliveryArea);
 }

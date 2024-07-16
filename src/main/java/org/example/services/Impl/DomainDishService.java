@@ -1,5 +1,6 @@
 package org.example.services.Impl;
 
+import org.example.dtos.DishDto;
 import org.example.entities.Dish;
 import org.example.entities.Position;
 import org.example.entities.enums.DishType;
@@ -7,6 +8,7 @@ import org.example.repositories.Impl.DishRepositoryImpl;
 import org.example.repositories.Impl.PositionRepositoryImpl;
 import org.example.services.DishService;
 import org.example.services.PositionService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,9 +24,11 @@ public class DomainDishService implements PositionService, DishService {
     @Autowired
     private DishRepositoryImpl dishRepository;
 
-    public List<Dish> getRecommendedDishes(Integer userId) {
+    private ModelMapper modelMapper = new ModelMapper();
+
+    public List<DishDto> getRecommendedDishes(Integer userId) {
         List<Dish> userDishes = findDishesByUserId(userId);
-        List<Dish> recommendedDishes = new ArrayList<>();
+        List<DishDto> recommendedDishes = new ArrayList<>();
         int calories;
         int minCalories;
         int maxCalories;
@@ -43,8 +47,8 @@ public class DomainDishService implements PositionService, DishService {
     }
 
     @Override
-    public List<Dish> findByTypeAndCalories(DishType type, int minCalories, int maxCalories) {
-        return dishRepository.findByTypeAndCalories(type, minCalories, maxCalories);
+    public List<DishDto> findByTypeAndCalories(DishType type, int minCalories, int maxCalories) {
+        return dishRepository.findByTypeAndCalories(type, minCalories, maxCalories).stream().map((s) -> modelMapper.map(s, DishDto.class)).toList();
     }
 
     @Override

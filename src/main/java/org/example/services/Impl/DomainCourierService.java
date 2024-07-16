@@ -1,6 +1,6 @@
 package org.example.services.Impl;
 
-import org.example.entities.Courier;
+import org.example.dtos.CourierDto;
 import org.example.entities.Dish;
 import org.example.entities.Position;
 import org.example.entities.enums.CourierTransportType;
@@ -10,6 +10,7 @@ import org.example.repositories.Impl.UserRepositoryImpl;
 import org.example.services.CourierService;
 import org.example.services.PositionService;
 import org.example.services.UserService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,7 @@ public class DomainCourierService implements PositionService, CourierService, Us
     @Autowired
     private UserRepositoryImpl userRepository;
 
+    private ModelMapper modelMapper = new ModelMapper();
 
     public int calculateOrderWeight(Integer orderId) {
         List<Position> positions = findByOrderId(orderId);
@@ -44,12 +46,12 @@ public class DomainCourierService implements PositionService, CourierService, Us
         return totalWeight;
     }
 
-    public Courier findSuitableCourier(Integer orderId, Integer userId) {
+    public CourierDto findSuitableCourier(Integer orderId, Integer userId) {
         String deliveryArea = findDeliveryAreaById(userId);
-        List<Courier> availableCouriers = findByDeliveryAreaAndStatus(deliveryArea);
+        List<CourierDto> availableCouriers = findByDeliveryAreaAndStatus(deliveryArea);
         int orderWeight = calculateOrderWeight(orderId) / 1000;
         System.out.println(availableCouriers);
-        for (Courier courier : availableCouriers) {
+        for (CourierDto courier : availableCouriers) {
             if (orderWeight <= 5 && CourierTransportType.WALKING.equals(courier.getTransportType())) {
                 return courier;
             } else if (orderWeight > 5 && orderWeight <= 10 && CourierTransportType.BICYCLE.equals(courier.getTransportType())) {
@@ -72,8 +74,8 @@ public class DomainCourierService implements PositionService, CourierService, Us
     }
 
     @Override
-    public List<Courier> findByDeliveryAreaAndStatus(String deliveryArea) {
-        return courierRepository.findByDeliveryAreaAndStatus(deliveryArea);
+    public List<CourierDto> findByDeliveryAreaAndStatus(String deliveryArea) {
+        return courierRepository.findByDeliveryAreaAndStatus(deliveryArea).stream().map((s) -> modelMapper.map(s, CourierDto.class)).toList();
     }
 
     @Override

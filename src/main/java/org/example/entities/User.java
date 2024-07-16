@@ -62,7 +62,6 @@ public class User extends BaseEntity {
     }
 
     @OneToMany(mappedBy = "user", targetEntity = Order.class)
-    @JsonBackReference
     public Set<Order> getOrders() {
         return orders;
     }

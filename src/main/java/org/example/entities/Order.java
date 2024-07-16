@@ -1,7 +1,5 @@
 package org.example.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.OffsetDateTime;
@@ -36,7 +34,6 @@ public class Order extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-    @JsonManagedReference
     public User getUser() {
         return user;
     }
@@ -47,7 +44,6 @@ public class Order extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "courier_id", referencedColumnName = "id", nullable = false)
-    @JsonManagedReference
     public Courier getCourier() {
         return courier;
     }
@@ -57,7 +53,6 @@ public class Order extends BaseEntity {
     }
 
     @OneToMany(mappedBy = "compositeKey.order", targetEntity = Position.class)
-    @JsonBackReference
     public Set<Position> getPositions() {
         return positions;
     }
